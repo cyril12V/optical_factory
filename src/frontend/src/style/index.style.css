@@ -1,0 +1,219 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 40px;
+}
+
+.container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.App > div:first-child {
+    margin-bottom: 30px;
+}
+
+.analysis-section {
+    padding: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin-top: 30px;
+    background-color: #fafafa;
+    text-align: left;
+}
+
+.analysis-section h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #1a73e8;
+}
+
+.analysis-button {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #1a73e8;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease, opacity 0.2s ease;
+    margin-bottom: 20px;
+}
+
+.analysis-button:disabled {
+    background-color: #90caf9;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.analysis-button:hover {
+    background-color: #1558b0;
+}
+
+.analysis-button:active {
+    background-color: #0d47a1;
+    transform: scale(0.98);
+}
+
+.error-message {
+    color: #d93025;
+    font-weight: 500;
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #fbe9e7;
+    border: 1px solid #f4c7c3;
+    border-radius: 4px;
+}
+
+.result-block {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.result-block h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    color: #1a73e8;
+}
+
+.result-block p {
+    margin-bottom: 0;
+}
+
+/* --- Styles pour les nouvelles sections --- */
+
+/* Conteneur principal de l'essai virtuel */
+.tryon-container {
+    position: relative;
+    margin-bottom: 30px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: #000;
+}
+
+/* Adapter la taille du canvas threejs si nécessaire */
+#threejsContainer, #threejsContainer canvas {
+    display: block;
+    max-width: 100%;
+    height: auto !important;
+}
+
+/* Section des contrôles et de l'analyse */
+.controls-analysis-section {
+    padding: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin-bottom: 30px;
+    background-color: #fafafa;
+    text-align: left;
+}
+
+.controls-analysis-section h2 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 25px;
+    color: #1a73e8;
+}
+
+/* Styles pour les sections de lunettes (communs) */
+.glasses-section {
+    padding: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin-bottom: 30px;
+    background-color: #ffffff;
+}
+
+.glasses-section h3 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #5f6368;
+}
+
+/* Grille pour les boutons de lunettes */
+.glasses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+/* Style des boutons de sélection de lunettes */
+.glasses-button {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #3c4043;
+    background-color: #f1f3f4;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.glasses-button:hover {
+    background-color: #e8eaed;
+    border-color: #c6c8ca;
+}
+
+.glasses-button.active {
+    background-color: #d2e3fc;
+    border-color: #1a73e8;
+    color: #174ea6;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(26, 115, 232, 0.2);
+}
+
+/* --- Animation de chargement simple --- */
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+.analysis-button:disabled {
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* Style spécifique pour le bloc résultat analyse */
+.analysis-result-block {
+    margin-top: 20px;
+    background-color: #e8f0fe;
+    border-left: 4px solid #1a73e8;
+    border-radius: 0 4px 4px 0;
+}

@@ -1,0 +1,58 @@
+{
+  "Ovale": [
+    "Montures rectangulaires",
+    "Montures carrées",
+    "Montures aviateur",
+    "Montures wayfarer",
+    "Presque toutes les formes conviennent"
+  ],
+  "Carrée": [
+    "Montures rondes",
+    "Montures ovales",
+    "Montures rondes avec partie supérieure plate",
+    "Montures sans cadre",
+    "Montures aux bords adoucis"
+  ],
+  "Ronde": [
+    "Montures rectangulaires",
+    "Montures carrées",
+    "Montures angulaires",
+    "Montures géométriques",
+    "Montures avec pont haut"
+  ],
+  "Rectangulaire": [
+    "Montures rondes ou ovales",
+    "Montures avec détails sur la partie supérieure",
+    "Montures aviateur",
+    "Montures papillon",
+    "Montures oversized"
+  ],
+  "Coeur": [
+    "Montures rondes ou ovales",
+    "Montures avec partie inférieure accentuée",
+    "Montures aviateur",
+    "Montures cat-eye légères",
+    "Montures à bords adoucis"
+  ],
+  "Losange": [
+    "Montures ovales",
+    "Montures rondes",
+    "Montures cat-eye",
+    "Montures semi-cerclées",
+    "Montures avec détails sur la partie supérieure"
+  ],
+  "Triangulaire": [
+    "Montures cat-eye",
+    "Montures avec details sur la partie supérieure",
+    "Montures semi-cerclées",
+    "Montures aviateur",
+    "Montures colorées sur le haut"
+  ],
+  "Inconnue": [
+    "Montures classiques",
+    "Montures ajustables",
+    "Essayez différentes formes pour voir ce qui vous convient",
+    "Consultez un opticien pour des conseils personnalisés",
+    "Montures à taille universelle"
+  ]
+} 

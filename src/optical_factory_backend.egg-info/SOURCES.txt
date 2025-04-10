@@ -1,0 +1,14 @@
+README.md
+pyproject.toml
+src/backend/__init__.py
+src/backend/main.py
+src/backend/app/__init__.py
+src/backend/app/facial_analysis.py
+src/backend/app/models.py
+src/frontend/node_modules/flatted/python/flatted.py
+src/optical_factory_backend.egg-info/PKG-INFO
+src/optical_factory_backend.egg-info/SOURCES.txt
+src/optical_factory_backend.egg-info/dependency_links.txt
+src/optical_factory_backend.egg-info/requires.txt
+src/optical_factory_backend.egg-info/top_level.txt
+src/utils/data_simulation.py

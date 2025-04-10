@@ -1,0 +1,231 @@
+Metadata-Version: 2.4
+Name: optical_factory_backend
+Version: 0.1.0
+Summary: Backend FastAPI pour Optical Factory
+Author-email: Votre Nom/Equipe <votre@email.com>
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: fastapi~=0.109.0
+Requires-Dist: uvicorn[standard]~=0.25.0
+Requires-Dist: pydantic~=1.10.0
+Requires-Dist: typing-extensions==4.12.0
+Requires-Dist: httpx~=0.25.0
+Requires-Dist: numpy
+Requires-Dist: scikit-learn
+Requires-Dist: joblib
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: pytest-cov; extra == "dev"
+Requires-Dist: requests; extra == "dev"
+Requires-Dist: opencv-python; extra == "dev"
+Requires-Dist: psutil; extra == "dev"
+Requires-Dist: scikit-learn; extra == "dev"
+Requires-Dist: joblib; extra == "dev"
+Requires-Dist: pandas; extra == "dev"
+Requires-Dist: fastapi; extra == "dev"
+Requires-Dist: uvicorn[standard]; extra == "dev"
+Requires-Dist: pydantic; extra == "dev"
+
+# Optical Factory - Essai Virtuel de Lunettes (Phase 2 - Comparaison Sklearn)
+
+[![Statut Build](https://img.shields.io/badge/build-passing-brightgreen)](./) <!-- Placeholder: Lien vers CI/CD -->
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+
+**Optical Factory** est une application web innovante conçue pour permettre aux utilisateurs d'essayer virtuellement des montures de lunettes. Elle utilise l'analyse du visage via webcam pour déterminer la morphologie faciale et recommander des modèles adaptés.
+
+Cette phase actuelle du projet utilise des modèles **Scikit-learn (MLP et RandomForest)** pour la classification de la forme du visage et intègre un système d'évaluation continue (**benchmark**) comparatif incluant le format **ONNX** pour mesurer et comparer la performance, la latence, l'équité et l'utilisation des ressources.
+
+## Fonctionnalités Actuelles
+
+*   **Capture Vidéo & Détection Landmarks :** Utilisation de la webcam et extraction des 468 landmarks faciaux via **TensorFlow.js (Facemesh)** côté frontend.
+*   **Analyse Morphologique Backend :**
+    *   Appel à une API backend **FastAPI**.
+    *   Classification de la forme du visage à l'aide du modèle **MLP (Multi-Layer Perceptron)** pré-entraîné avec **Scikit-learn** comme modèle principal.
+    *   Entraînement d'un modèle **RandomForestClassifier** pour comparaison.
+    *   Export du modèle **MLP au format ONNX** (`.onnx`) pour portabilité et évaluation.
+*   **Recommandation de Lunettes Statique :** Basée sur la forme prédite par le MLP.
+*   **Interface Utilisateur React :** Visualisation vidéo, lancement analyse, affichage résultat.
+*   **Système d'Évaluation (Benchmark) Comparatif (`/benchmark`) :** Script Python évaluant et comparant :
+    *   **MLP (joblib)** : Précision, Latence, Métriques détaillées (rapport, matrice), Mémoire.
+    *   **RandomForest (joblib)** : Précision, Latence, Métriques détaillées, Mémoire.
+    *   **MLP (ONNX)** : Précision, Latence, Métriques détaillées, Mémoire (via `onnxruntime`).
+    *   **Détection Faciale OpenCV** : Précision sur vidéos test.
+    *   **Équité (MLP)** : Écart de performance entre groupes simulés.
+    *   Génération d'un rapport JSON comparatif (`evaluation_results.json`) avec statut basé sur `config/evaluation_criteria.json`.
+
+## Fonctionnalités Envisagées / Pistes Futures
+
+*   **Modèles Plus Avancés :** Exploration CNN/Transformers (actuellement en pause - voir ARCHITECTURE.md), autres classifieurs Sklearn (SVM, GB).
+*   **Optimisation ONNX :** Quantification, test des `execution providers`.
+*   **Adaptation Domaine / Robustesse :** Augmentation de données avancée.
+*   **Recommandation :** Clustering sur landmarks, logique de recommandation améliorée.
+*   **Essai Virtuel AR (Mis de côté) :** Intégration Three.js.
+*   **Infrastructure :** CI/CD, Déploiement PaaS/IaaS.
+
+Consultez [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) pour une description détaillée.
+
+## Pile Technologique Principale
+
+*   **Frontend :** React, TensorFlow.js (Facemesh), WebRTC.
+*   **Backend :** Python (>= 3.9), FastAPI, Uvicorn, **Scikit-learn**, Joblib, Numpy, Pydantic.
+*   **Benchmark & Tests :** Pytest, OpenCV-Python, Psutil, Pandas, **ONNX Runtime**, **skl2onnx**.
+*   **Gestion Dépendances/Build :** npm (Frontend), pip & venv (Backend), `pyproject.toml`.
+
+## Structure du Projet
+
+```
+/
+├── benchmark/          # Scripts d'évaluation (optical_factory_evaluation.py)
+│   ├── test_data/      # Données de test (simulated_face_data.csv, videos/)
+│   └── evaluation_results.json # Sortie JSON comparative du benchmark
+├── config/             # Fichiers de configuration
+│   └── evaluation_criteria.json # Seuils pour le benchmark
+├── docs/               # Documentation technique
+│   └── ARCHITECTURE.md # Description architecture + pistes futures
+├── fresh_env/          # Environnement virtuel Python
+├── node_modules/       # Dépendances Frontend
+├── public/             # Fichiers statiques React
+├── scripts/            # Scripts utilitaires
+│   └── train_mlp_model.py # Entraîne MLP et RF, exporte MLP en ONNX
+├── src/                # Code source principal
+│   ├── backend/        # Code du backend FastAPI
+│   │   ├── app/        # Logique applicative (facial_analysis.py utilise MLP)
+│   │   ├── models/     # Modèles ML sérialisés (mlp_*.joblib, rf_*.joblib, mlp_*.onnx)
+│   │   └── main.py     # Point d'entrée API FastAPI (utilise MLP)
+│   ├── frontend/       # Code du frontend React
+│   └── utils/          # Utilitaires Python (data_simulation.py)
+├── tests/              # Tests automatisés (principalement backend)
+├── .gitignore          # Fichiers/dossiers ignorés par Git
+├── LICENSE             # Fichier de licence (Ex: MIT)
+├── package-lock.json   # Lockfile npm
+├── package.json        # Dépendances racine (peut être vide ou pour workspaces)
+├── pyproject.toml      # Configuration projet Python (build, tool.pytest, project deps)
+└── README.md           # Ce fichier
+```
+
+## Installation
+
+Suivez ces étapes pour configurer l'environnement de développement local.
+
+### Prérequis
+
+*   Git
+*   Python >= 3.9 (avec `pip` et `venv`)
+*   Node.js >= 16 (v18+ recommandé)
+*   npm >= 7 (livré avec Node.js récent)
+
+### Étapes
+
+1.  **Cloner le dépôt :**
+    ```bash
+    git clone <URL_DU_DEPOT>
+    cd projetspe3 # Ou le nom de votre dossier
+    ```
+
+2.  **Configurer le Backend (Python) :** (Depuis la racine `projetspe3`)
+    ```bash
+    # 1. Créer et activer l'environnement virtuel
+    python -m venv fresh_env
+    # Windows PowerShell:
+    .\fresh_env\Scripts\activate
+    # macOS / Linux:
+    # source fresh_env/bin/activate
+
+    # 2. Mettre à jour pip et installer les dépendances via pyproject.toml
+    #    Ceci installe le projet src/ en mode éditable et les dépendances [dev]
+    #    Attention: tensorflow peut être volumineux.
+    python -m pip install --upgrade pip
+    pip install -e .[dev]
+    ```
+    *Note : Le flag `[dev]` installe les dépendances nécessaires pour le développement, les tests, et l'entraînement (ex: `pytest`, `opencv-python`, `tensorflow`, `tf2onnx`, etc.).*
+
+3.  **Configurer le Frontend (React) :** (Depuis la racine `projetspe3`)
+    ```bash
+    cd src/frontend
+    npm install
+    cd ../.. # Revenir à la racine
+    ```
+    *Note : Si vous rencontrez des erreurs liées à OpenSSL avec Node.js v17+, vous pourriez avoir besoin de définir une variable d'environnement avant `npm install` ou `npm start`.*
+
+## Utilisation
+
+Lancez le backend et le frontend dans deux terminaux séparés, en vous assurant d'être à la **racine du projet** (`projetspe3`).
+
+1.  **Lancer le Backend FastAPI (avec modèle MLP) :**
+    *   Assurez-vous que votre environnement virtuel (`fresh_env`) est activé.
+    ```bash
+    # Activer l'environnement si ce n'est pas déjà fait
+    # .\fresh_env\Scripts\activate (Windows) ou source fresh_env/bin/activate (Linux/macOS)
+
+    # Lancer le serveur avec rechargement automatique
+    uvicorn src.backend.main:app --reload --host 0.0.0.0 --port 8000
+    ```
+    L'API sera accessible sur `http://localhost:8000`.
+    La documentation interactive (Swagger UI / ReDoc) est sur `http://localhost:8000/docs` ou `/redoc`.
+
+2.  **Lancer le Frontend React :**
+    ```bash
+    cd src/frontend
+    npm start
+    cd ../.. # Optionnel : revenir à la racine après lancement
+    ```
+    Ouvrez votre navigateur et allez sur l'URL indiquée (généralement `http://localhost:3000`).
+
+3.  **Utiliser l'application :**
+    *   Autorisez l'accès à la webcam.
+    *   Placez votre visage dans le cadre.
+    *   Cliquez sur **"Analyser mon visage"**. Le frontend envoie les landmarks détectés au backend.
+    *   Le backend répond avec la forme du visage prédite par le modèle **MLP**.
+    *   La forme s'affiche, et les boutons des lunettes recommandées apparaissent.
+
+## Entraînement des Modèles (MLP & RF + Export ONNX)
+
+Si vous souhaitez ré-entraîner les modèles Scikit-learn (MLP et RandomForest) et régénérer l'export ONNX du MLP :
+
+1.  Assurez-vous que l'environnement virtuel (`fresh_env`) est activé avec les dépendances `[dev]`.
+2.  Exécutez le script d'entraînement depuis la racine du projet :
+    ```bash
+    python scripts/train_mlp_model.py
+    ```
+3.  Cela entraînera les deux modèles sur des données simulées fraîches et sauvegardera les fichiers `.joblib` et `.onnx` correspondants dans `src/backend/models/`.
+
+## Tests Automatisés
+
+Les tests backend vérifient la fonctionnalité de l'API et la logique métier.
+
+1.  Assurez-vous que l'environnement virtuel (`fresh_env`) est activé.
+2.  Lancez `pytest` depuis la racine du projet :
+    ```bash
+    pytest
+    ```
+    *   Utilisez des options pour plus de contrôle (ex: `pytest -v`, `pytest -k test_name`, `pytest --cov=src/backend`).
+
+## Évaluation Continue (Benchmark Comparatif)
+
+Le script de benchmark compare les performances des modèles MLP, RandomForest et MLP-ONNX.
+
+1.  **Prérequis :** Dépendances `[dev]` installées, données vidéo et CSV simulées dans `benchmark/test_data/`.
+2.  **Lancer le Benchmark :** (Depuis la racine, `fresh_env` activé)
+    ```bash
+    python benchmark/optical_factory_evaluation.py
+    ```
+3.  **Analyser les résultats :**
+    *   La console affiche les performances (précision, latence) de chaque modèle évalué.
+    *   Le rapport complet (`benchmark/evaluation_results.json`) contient les métriques détaillées (rapports de classification, matrices de confusion) et les comparaisons aux critères pour chaque modèle.
+
+## Documentation
+
+*   **Architecture Technique Détaillée & Pistes Futures :** [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+*   **Documentation de l'API Backend :** Accessible via Swagger UI/ReDoc quand le backend est lancé.
+
+## Licence
+
+Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+
+## Auteurs
+
+*   [Votre Nom / Nom de l'équipe]
+*   [Contributions éventuelles...] 

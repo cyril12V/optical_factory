@@ -1,0 +1,103 @@
+{
+    "project": "Optical Factory",
+    "evaluation_date": "2025-04-10 02:48:10",
+    "model_evaluated": "estimate_face_shape_mlp",
+    "criteria_file": "config\\evaluation_criteria.json",
+    "metrics": [
+        {
+            "metric": "facial_detection_precision",
+            "value": 100.0,
+            "threshold": 0.85,
+            "status": "Atteint",
+            "details": {
+                "avg_latency_ms": 76.20863189539496
+            }
+        },
+        {
+            "metric": "shape_classification_accuracy",
+            "value": 0.747,
+            "threshold": 0.9,
+            "status": "Non atteint",
+            "details": {
+                "classification_report": "              precision    recall  f1-score   support\n\n      Carr\u00e9e       0.66      0.98      0.79       201\n       Coeur       0.88      0.88      0.88       201\n      Longue       0.65      1.00      0.79       220\n       Ovale       0.88      0.07      0.13       199\n       Ronde       0.95      0.78      0.86       179\n\n    accuracy                           0.75      1000\n   macro avg       0.80      0.74      0.69      1000\nweighted avg       0.80      0.75      0.69      1000\n",
+                "confusion_matrix": [
+                    [
+                        197,
+                        0,
+                        0,
+                        1,
+                        3
+                    ],
+                    [
+                        0,
+                        177,
+                        24,
+                        0,
+                        0
+                    ],
+                    [
+                        0,
+                        0,
+                        220,
+                        0,
+                        0
+                    ],
+                    [
+                        61,
+                        25,
+                        95,
+                        14,
+                        4
+                    ],
+                    [
+                        39,
+                        0,
+                        0,
+                        1,
+                        139
+                    ]
+                ]
+            }
+        },
+        {
+            "metric": "inference_latency",
+            "value": 1.1002841999743396,
+            "threshold_ms": 200,
+            "status": "Atteint",
+            "details": "Latence moyenne sur 1000 \u00e9chantillons."
+        },
+        {
+            "metric": "algorithmic_fairness_gap",
+            "value": 0.010098585237820923,
+            "threshold": 0.2,
+            "status": "Atteint",
+            "details": "\u00c9cart max de pr\u00e9cision entre groupes A/B."
+        },
+        {
+            "metric": "recommendation_access_rate",
+            "value": 1.0,
+            "threshold": 0.99,
+            "status": "Atteint",
+            "details": "Taux de pr\u00e9dictions valides (non 'Inconnue'/Erreur)."
+        },
+        {
+            "metric": "memory_usage",
+            "value": 0.10546875,
+            "threshold_mb": 500,
+            "status": "Atteint",
+            "details": "Utilisation RSS approximative mesur\u00e9e par psutil pour 1000 pr\u00e9dictions."
+        },
+        {
+            "metric": "ar_fps",
+            "value": 21.9,
+            "threshold": 15,
+            "status": "Atteint",
+            "details": "Valeur simul\u00e9e (placeholder) - \u00e9valuation r\u00e9elle requiert int\u00e9gration frontend."
+        }
+    ],
+    "summary": {
+        "criteria_passed": 6,
+        "total_criteria": 7,
+        "success_rate_percent": 85.71
+    }
+}

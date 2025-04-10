@@ -1,0 +1,30 @@
+{
+  "facial_detection_precision": {
+    "threshold": 0.85,
+    "justification": "PLACEHOLDER: Objectif pour la *détection* de visage (présence/absence) sur vidéo. Actuellement mesuré avec Haar/OpenCV."
+  },
+  "shape_classification_precision": {
+    "threshold": 0.90,
+    "justification": "Précision mesurée du classifieur MLP sur les données de test simulées (CSV)."
+  },
+  "inference_latency_ms": {
+    "threshold": 5,
+    "justification": "Latence moyenne mesurée du modèle MLP (backend Python, CPU)."
+  },
+  "algorithmic_fairness_gap": {
+    "threshold": 0.20,
+    "justification": "Écart de performance max toléré entre groupes pour la classification MLP sur données simulées."
+  },
+  "recommendation_access_rate": {
+      "threshold": 0.99,
+      "justification": "Vise à ce que tous les groupes aient accès aux recommandations si applicable (taux minimal observé)."
+  },
+  "ar_fps": {
+    "threshold": 15,
+    "justification": "PLACEHOLDER: Cible minimale pour une expérience AR fluide (non implémenté / mesuré)."
+  },
+  "memory_usage_mb": {
+    "threshold": 300,
+    "justification": "Utilisation mémoire RSS totale (psutil) du processus benchmark (incluant OpenCV + inférence MLP)."
+  }
+} 
