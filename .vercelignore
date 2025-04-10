@@ -1,0 +1,5 @@
+src/backend
+**/api/**
+**/requirements.txt
+**/__pycache__
+**/*.py 

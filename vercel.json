@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "buildCommand": "cd src/frontend && npm install && npm run build",
+  "outputDirectory": "src/frontend/build",
+  "ignoreCommand": "echo \"Skipping verification\"",
+  "routes": [
+    { "src": "/(.*)", "dest": "/$1" }
+  ],
+  "installCommand": "echo \"Skipping installation\"",
+  "builds": [
+    { "src": "src/frontend/package.json", "use": "@vercel/static-build" }
+  ]
+} 
