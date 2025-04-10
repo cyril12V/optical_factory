@@ -77,13 +77,20 @@ function setGlassesToScene(objName){
     glassesObj = null;
     currentGlassesModelName = objName;
 
+    // Détection si nous sommes sur Vercel ou en local
+    const basePath = window.location.hostname.includes('vercel.app') 
+        ? "/src/frontend/obj/" 
+        : process.env.PUBLIC_URL+"/obj/";
+
+    console.log("Loading 3D models from path:", basePath);
+
     var mtlLoader = new MTLLoader();
     mtlLoader.setMaterialOptions({side:THREE.DoubleSide});
-    mtlLoader.load(process.env.PUBLIC_URL+"/obj/"+objName+'.mtl', materials => {
+    mtlLoader.load(basePath+objName+'.mtl', materials => {
         materials.preload();
         const objLoader = new OBJLoader();
         objLoader.setMaterials(materials);
-        objLoader.load(process.env.PUBLIC_URL+"/obj/"+objName+'.obj', obj => {
+        objLoader.load(basePath+objName+'.obj', obj => {
             if (currentGlassesModelName === objName) {
                 glassesObj = obj;
                 glassesObj.name = objName;
@@ -103,7 +110,12 @@ function setGlassesToScene(objName){
 }
 
 function getFaceMask(){
-    new OBJLoader().load(process.env.PUBLIC_URL+'/obj/facemesh.obj', obj => {
+    // Détection si nous sommes sur Vercel ou en local
+    const basePath = window.location.hostname.includes('vercel.app') 
+        ? "/src/frontend/obj/" 
+        : process.env.PUBLIC_URL+"/obj/";
+        
+    new OBJLoader().load(basePath+'facemesh.obj', obj => {
         obj.traverse(child => {
             if (child instanceof THREE.Mesh) {
                 faceObj = new THREE.Mesh(child.geometry, new THREE.MeshLambertMaterial({side: THREE.FrontSide, color: "blue"}));
