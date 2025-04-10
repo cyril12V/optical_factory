@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "functions": {
+    "api/**/*.py": {
+      "runtime": "python3.9"
+    }
+  },
+  "routes": [
+    { "src": "/api/(.*)", "dest": "api/$1.py" }
+  ],
+  "buildCommand": "pip install -r src/backend/requirements.txt",
+  "devCommand": "uvicorn src.backend.main:app --host 0.0.0.0 --port 3000"
+} 
