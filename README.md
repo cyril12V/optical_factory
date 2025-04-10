@@ -180,6 +180,49 @@ Les tests sont configurés avec `pytest.ini` pour utiliser des marqueurs personn
 
 **Note**: Certains tests comme `test_heuristic_performance_across_groups` affichent des erreurs liées au format des données, mais ces erreurs sont gérées et les tests passent, ce qui démontre la robustesse du système.
 
+### 3. Commandes à exécuter pour lancer les tests
+
+Pour exécuter les tests, lancez les commandes suivantes depuis le répertoire racine du projet :
+
+#### Tests complets
+```bash
+# Lancer tous les tests
+pytest
+
+# Exécuter tous les tests avec détails
+pytest -v
+
+# Exécuter avec détails et afficher les messages de print
+pytest -xvs
+```
+
+#### Tests par catégorie
+```bash
+# Tests fonctionnels de l'API
+pytest -m fonctionnel
+
+# Tests de gestion des erreurs
+pytest -m erreur
+
+# Tests d'équité et de biais
+pytest -m biais
+```
+
+#### Tests spécifiques
+```bash
+# Tester uniquement l'API
+pytest tests/backend/test_api.py
+
+# Tester l'analyse faciale
+pytest tests/backend/test_facial_analysis.py
+
+# Tester les biais et l'équité
+pytest tests/backend/test_bias_fairness.py
+
+# Tester une fonction spécifique
+pytest tests/backend/test_api.py::test_predict_valid_request
+``` 
+
 ### 2. Benchmark et Évaluation de Performance
 
 Le répertoire `benchmark/` contient un système d'évaluation approfondi, activable via le script `optical_factory_evaluation.py`.
