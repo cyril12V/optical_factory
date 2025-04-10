@@ -296,5 +296,5 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 
 ## Auteurs
 
-*   [Votre Nom / Nom de l'équipe]
-*   [Contributions éventuelles...] 
+*   Cyril Shalaby
+*   Epitech Digital
