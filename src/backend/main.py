@@ -5,8 +5,8 @@ from typing import List
 import logging
 
 # Imports relatifs au dossier courant
-from src.backend.app.models import PredictRequest, PredictResponse, LandmarkModel
-from src.backend.app.facial_analysis import (
+from app.models import PredictRequest, PredictResponse, LandmarkModel
+from app.facial_analysis import (
     estimate_face_shape_mlp,
     get_recommendations,
     estimate_face_shape_from_landmarks_heuristic,
@@ -28,8 +28,8 @@ app = FastAPI(
 # TODO: Restreindre les origines en production !
 origins = [
     "http://localhost:3000",  # Adresse typique de React en développement
-    "localhost:3000" # Parfois nécessaire sans http://
-    # Ajoutez d'autres origines si nécessaire (ex: l'URL de déploiement)
+    "localhost:3000", # Parfois nécessaire sans http://
+    "*" # Autorise toutes les origines pour le déploiement Vercel
 ]
 
 app.add_middleware(
