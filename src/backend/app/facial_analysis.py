@@ -1,5 +1,5 @@
 import math
-from typing import List, Tuple, Dict, Literal, get_args, TypeAlias
+from typing import List, Tuple, Dict, Literal, get_args, Union
 import joblib
 import json
 from pathlib import Path
@@ -7,8 +7,9 @@ import numpy as np
 import logging
 
 # Définir les types manquants
-Landmarks: TypeAlias = List[List[float]] # Liste de [x, y, z]
-FaceShape: TypeAlias = Literal["Ovale", "Carrée", "Ronde", "Coeur", "Longue", "Inconnue"] # Ajouter "Inconnue"
+# Utilisation de commentaires de type plutôt que TypeAlias pour compatibilité Python 3.9
+Landmarks = List[List[float]] # Liste de [x, y, z]
+FaceShape = Literal["Ovale", "Carrée", "Ronde", "Coeur", "Longue", "Inconnue"] # Ajouter "Inconnue"
 
 # Configuration du logging
 logging.basicConfig(level=logging.INFO)
@@ -87,7 +88,7 @@ def load_mlp_models():
 
 # --- Fonctions d'estimation --- 
 
-def estimate_face_shape_from_landmarks_heuristic(landmarks: List[List[float]] | List[Tuple[float, float, float]]) -> str:
+def estimate_face_shape_from_landmarks_heuristic(landmarks: Union[List[List[float]], List[Tuple[float, float, float]]]) -> str:
     """Estime la forme du visage en utilisant une heuristique basée sur les landmarks."""
     # (Votre logique heuristique ici - potentiellement simplifiée ou gardée)
     # Exemple simple basé sur la largeur vs hauteur (à adapter)
