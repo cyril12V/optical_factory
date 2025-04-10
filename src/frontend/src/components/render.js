@@ -3,7 +3,9 @@ import {MTLLoader} from 'three/examples/jsm/loaders/MTLLoader';
 import {OBJLoader} from 'three/examples/jsm/loaders/OBJLoader';
 import * as facemesh from '@tensorflow-models/facemesh';
 import * as tf from '@tensorflow/tfjs-core';
-
+// Préchargement des backends pour éviter les erreurs de registry
+import '@tensorflow/tfjs-backend-webgl';
+import '@tensorflow/tfjs-backend-cpu';
 
 var model;
 var glassesObj;
@@ -77,54 +79,115 @@ function setGlassesToScene(objName){
     glassesObj = null;
     currentGlassesModelName = objName;
 
-    // Détection si nous sommes sur Vercel ou en local
-    const basePath = window.location.hostname.includes('vercel.app') 
-        ? "/src/frontend/obj/" 
-        : process.env.PUBLIC_URL+"/obj/";
-
-    console.log("Loading 3D models from path:", basePath);
-
-    var mtlLoader = new MTLLoader();
-    mtlLoader.setMaterialOptions({side:THREE.DoubleSide});
-    mtlLoader.load(basePath+objName+'.mtl', materials => {
-        materials.preload();
-        const objLoader = new OBJLoader();
-        objLoader.setMaterials(materials);
-        objLoader.load(basePath+objName+'.obj', obj => {
-            if (currentGlassesModelName === objName) {
-                glassesObj = obj;
-                glassesObj.name = objName;
-                glassesObj.renderOrder = 3;
-                glassesObj.visible = false;
-                scene.add(glassesObj);
-                console.log("Loaded and added glasses:", objName);
-            } else {
-                console.log("Skipping assignment for", objName, "as current model is", currentGlassesModelName);
+    // Tableau de tous les chemins possibles à essayer
+    const possiblePaths = [
+        "/obj/",
+        "/src/frontend/obj/",
+        "/src/frontend/public/obj/",
+        "https://optical-factory-front.vercel.app/obj/",
+        "https://optical-factory-front.vercel.app/src/frontend/obj/",
+        "/public/obj/"
+    ];
+    
+    // Fonction pour charger avec le chemin de base correct
+    const tryLoad = (index) => {
+        if (index >= possiblePaths.length) {
+            console.error("Tous les chemins ont échoué pour charger", objName);
+            return;
+        }
+        
+        const basePath = possiblePaths[index];
+        console.log(`Essai de chargement depuis ${basePath}${objName}.mtl`);
+        
+        const mtlLoader = new MTLLoader();
+        mtlLoader.setMaterialOptions({side:THREE.DoubleSide});
+        mtlLoader.load(basePath + objName + '.mtl', 
+            // Succès
+            materials => {
+                materials.preload();
+                const objLoader = new OBJLoader();
+                objLoader.setMaterials(materials);
+                objLoader.load(basePath + objName + '.obj', 
+                    // Succès
+                    obj => {
+                        if (currentGlassesModelName === objName) {
+                            glassesObj = obj;
+                            glassesObj.name = objName;
+                            glassesObj.renderOrder = 3;
+                            glassesObj.visible = false;
+                            scene.add(glassesObj);
+                            console.log("SUCCÈS: Chargé depuis", basePath);
+                        } else {
+                            console.log("Skipping assignment for", objName);
+                        }
+                    },
+                    undefined,
+                    // Erreur obj
+                    (error) => {
+                        console.log(`Échec de chargement ${basePath}${objName}.obj:`, error);
+                        tryLoad(index + 1);
+                    }
+                );
+            },
+            undefined,
+            // Erreur mtl
+            (error) => {
+                console.log(`Échec de chargement ${basePath}${objName}.mtl:`, error);
+                tryLoad(index + 1);
             }
-        }, undefined, (error) => {
-            console.error('Error loading OBJ for '+ objName + ':', error);
-        })
-    }, undefined, (error) => {
-        console.error('Error loading MTL for '+ objName + ':', error);
-    })
+        );
+    };
+    
+    // Démarrer avec le premier chemin
+    tryLoad(0);
 }
 
 function getFaceMask(){
-    // Détection si nous sommes sur Vercel ou en local
-    const basePath = window.location.hostname.includes('vercel.app') 
-        ? "/src/frontend/obj/" 
-        : process.env.PUBLIC_URL+"/obj/";
+    // Mêmes chemins possibles que pour les lunettes
+    const possiblePaths = [
+        "/obj/",
+        "/src/frontend/obj/",
+        "/src/frontend/public/obj/",
+        "https://optical-factory-front.vercel.app/obj/",
+        "https://optical-factory-front.vercel.app/src/frontend/obj/",
+        "/public/obj/"
+    ];
+    
+    // Fonction pour essayer de charger le masque facial
+    const tryLoadFaceMask = (index) => {
+        if (index >= possiblePaths.length) {
+            console.error("Tous les chemins ont échoué pour charger facemesh.obj");
+            return;
+        }
         
-    new OBJLoader().load(basePath+'facemesh.obj', obj => {
-        obj.traverse(child => {
-            if (child instanceof THREE.Mesh) {
-                faceObj = new THREE.Mesh(child.geometry, new THREE.MeshLambertMaterial({side: THREE.FrontSide, color: "blue"}));
-                faceObj.material.colorWrite = false;
-                faceObj.renderOrder = 5;
-                scene.add(faceObj);
+        const basePath = possiblePaths[index];
+        console.log(`Essai de chargement facemesh depuis ${basePath}facemesh.obj`);
+        
+        new OBJLoader().load(
+            basePath + 'facemesh.obj', 
+            // Succès
+            obj => {
+                obj.traverse(child => {
+                    if (child instanceof THREE.Mesh) {
+                        faceObj = new THREE.Mesh(child.geometry, new THREE.MeshLambertMaterial({side: THREE.FrontSide, color: "blue"}));
+                        faceObj.material.colorWrite = false;
+                        faceObj.renderOrder = 5;
+                        scene.add(faceObj);
+                        console.log("SUCCÈS: facemesh chargé depuis", basePath);
+                    }
+                });
+            },
+            undefined,
+            // Erreur
+            (error) => {
+                console.log(`Échec de chargement ${basePath}facemesh.obj:`, error);
+                tryLoadFaceMask(index + 1);
             }
-        });
-    })
+        );
+    };
+    
+    // Démarrer avec le premier chemin
+    tryLoadFaceMask(0);
 }
 
 export function IntializeThreejs(objName) {
@@ -165,9 +228,29 @@ function animate() {
 }
 
 export async function IntializeEngine() {
-    await tf.setBackend('webgl');
-    model = await facemesh.load({ maxFaces: 1 });
-    renderPrediction();
+    try {
+        // Chargement des backends dans un ordre de préférence
+        await Promise.all([
+            tf.ready(),
+            import('@tensorflow/tfjs-backend-webgl'),
+            import('@tensorflow/tfjs-backend-cpu')
+        ]);
+        
+        // Essayer webgl d'abord, sinon utiliser cpu
+        try {
+            await tf.setBackend('webgl');
+            console.log("Backend TensorFlow: webgl");
+        } catch (e) {
+            console.warn("WebGL non disponible, utilisation de CPU:", e);
+            await tf.setBackend('cpu');
+            console.log("Backend TensorFlow: cpu");
+        }
+        
+        model = await facemesh.load({ maxFaces: 1 });
+        renderPrediction();
+    } catch (error) {
+        console.error("Erreur d'initialisation TensorFlow:", error);
+    }
 }
 
 export function changeGlassesModel(newModelName) {
