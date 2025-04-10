@@ -1,0 +1,30 @@
+# Git
+.git
+.gitignore
+
+# Environnement virtuel
+venv/
+env/
+ENV/
+.env
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# IDE et éditeurs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Fichiers générés
+*.log
+.DS_Store 
